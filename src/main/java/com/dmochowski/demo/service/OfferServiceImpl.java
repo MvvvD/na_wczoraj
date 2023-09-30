@@ -3,6 +3,7 @@ package com.dmochowski.demo.service;
 import com.dmochowski.demo.dao.OfferRepo;
 import com.dmochowski.demo.entity.Offer;
 import lombok.AllArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -51,6 +52,10 @@ public class OfferServiceImpl implements OfferService{
         offer.setPostedOn(new Timestamp(System.currentTimeMillis()));
         return offerRepo.save(offer);
     }
-
+    @Scheduled(cron = "55 59 23 * * ?")
+    public void clearTable(){
+        //TODO add archiving/history feature
+        offerRepo.deleteAll();
+    }
 
 }
