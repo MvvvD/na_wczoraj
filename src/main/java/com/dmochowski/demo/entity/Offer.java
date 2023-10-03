@@ -25,5 +25,7 @@ public class Offer {
     private String category;
     @Column(name = "POSTED_ON")
     private java.sql.Timestamp postedOn;
+    @Column(name = "SPECIAL_CODE")
+    private String code;
 
 }

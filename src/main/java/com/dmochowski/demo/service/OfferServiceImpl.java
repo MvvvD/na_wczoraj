@@ -9,11 +9,13 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @AllArgsConstructor
 public class OfferServiceImpl implements OfferService{
     private final OfferRepo offerRepo;
+    private static final int codeLen = 8;
 
     @Override
     public List<Offer> findAll() {
@@ -46,10 +48,17 @@ public class OfferServiceImpl implements OfferService{
         offerRepo.delete(findById(id));
     }
 
+    //TODO add delete if proper code
+    //TODO add update if proper code
+
     @Override
     public Offer add(Offer offer) {
         offer.setId(0);
         offer.setPostedOn(new Timestamp(System.currentTimeMillis()));
+        offer.setCode(SpecialCodeGenerator.codeGenerator());
+        if(offer.getCode().length()!=codeLen){
+            throw new RuntimeException("Code length error");
+        }
         return offerRepo.save(offer);
     }
     @Scheduled(cron = "55 59 23 * * ?")
@@ -58,4 +67,19 @@ public class OfferServiceImpl implements OfferService{
         offerRepo.deleteAll();
     }
 
+
+    private static class SpecialCodeGenerator{
+        static char[] chars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p', 'a', 's',
+                'd', 'f', 'g', 'h', 'j', 'k', 'l', 'y', 'x', 'c', 'v', 'b', 'n', 'm', 'Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'A',
+                'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Y', 'X', 'C', 'V', 'B', 'N', 'M' };
+
+        private static String codeGenerator(){
+            StringBuilder stringBuilder = new StringBuilder();
+            for(int i = 0; i < codeLen; i++){
+                stringBuilder.append(chars[new Random().nextInt(chars.length)]);
+            }
+            return stringBuilder.toString();
+
+        }
+    }
 }
