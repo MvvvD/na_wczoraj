@@ -44,12 +44,27 @@ public class OfferServiceImpl implements OfferService{
     }
 
     @Override
-    public void delete(int id) {
-        offerRepo.delete(findById(id));
+    public boolean delete(int id, String code){
+        Offer offer = findById(id);
+        if (offer.getCode().equals(code)){
+            offerRepo.delete(offer);
+            return true;
+        }return false;
     }
+    //TODO add update if proper code to controller
 
-    //TODO add delete if proper code
-    //TODO add update if proper code
+
+    @Override
+    public Offer update(int id, Offer offer, String code) {
+        Offer dbOffer = findById(id);
+        if (!code.equals(dbOffer.getCode())){
+            throw new RuntimeException("Wrong code");
+        }
+        offer.setCode(code);
+        offer.setPostedOn(dbOffer.getPostedOn());
+        offerRepo.save(offer);
+        return offer;
+    }
 
     @Override
     public Offer add(Offer offer) {

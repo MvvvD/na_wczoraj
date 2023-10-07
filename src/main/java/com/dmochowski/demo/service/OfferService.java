@@ -9,6 +9,7 @@ public interface OfferService {
     List<Offer> findByCategory(String category);
     Offer findById(int id);
     void delete(Offer offer);
-    void delete(int id);
+    Offer update(int id, Offer offer, String code);
+    boolean delete(int id, String code);
     Offer add(Offer offer);
 }

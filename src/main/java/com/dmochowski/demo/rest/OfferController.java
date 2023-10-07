@@ -1,5 +1,6 @@
 package com.dmochowski.demo.rest;
 
+import com.dmochowski.demo.entity.Code;
 import com.dmochowski.demo.entity.Offer;
 import com.dmochowski.demo.service.OfferService;
 import lombok.AllArgsConstructor;
@@ -28,13 +29,10 @@ public class OfferController {
         return offerService.findByCategory(category);
     }
 
-    @DeleteMapping()
-    public void remove(@RequestBody Offer offer){
-        offerService.delete(offer);
-    }
     @DeleteMapping("/{id}")
-    public void remove(@PathVariable int id){
-        offerService.delete(id);
+    public boolean remove(@PathVariable int id, @RequestBody Code code){
+        System.out.println(code);
+        return offerService.delete(id, code.code());
     }
 
     @PostMapping()
