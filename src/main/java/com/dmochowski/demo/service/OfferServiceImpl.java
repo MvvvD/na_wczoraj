@@ -2,18 +2,20 @@ package com.dmochowski.demo.service;
 
 import com.dmochowski.demo.dao.OfferRepo;
 import com.dmochowski.demo.entity.Offer;
+import com.dmochowski.demo.entity.OfferCodeless;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
 @Service
 @AllArgsConstructor
-public class OfferServiceImpl implements OfferService{
+public class OfferServiceImpl implements OfferService {
     private final OfferRepo offerRepo;
     private static final int codeLen = 8;
 
@@ -21,76 +23,92 @@ public class OfferServiceImpl implements OfferService{
     public List<Offer> findAll() {
         return offerRepo.findAll();
     }
+    @Override
+    public List<OfferCodeless> findAllCodeless() {
+        List<OfferCodeless> codeless = new ArrayList<>();
+        findAll().forEach(offer -> codeless.add(offerToCodeless(offer)));
+        return codeless;
+    }
 
     @Override
-    public List<Offer> findByCategory(String category) {
-        return offerRepo.findByCategory(category);
+    public List<OfferCodeless> findByCategory(String category) {
+        List<OfferCodeless> codeless = new ArrayList<>();
+        offerRepo.findByCategory(category).forEach(offer -> codeless.add(offerToCodeless(offer)));
+        return codeless;
     }
 
     @Override
     public Offer findById(int id) {
         Optional<Offer> offer = offerRepo.findById(id);
-        if (offer.isEmpty()){
-            throw new RuntimeException("Employee with ID "+ id + " not found");
-        }
-        else {
-             return offer.get();
+        if (offer.isEmpty()) {
+            throw new RuntimeException("Employee with ID " + id + " not found");
+        } else {
+            return offer.get();
         }
     }
 
+    @Override
+    public OfferCodeless findByIdCodeless(int id) {
+        return offerToCodeless(findById(id));
+    }
     @Override
     public void delete(Offer offer) {
         offerRepo.delete(offer);
     }
 
     @Override
-    public boolean delete(int id, String code){
+    public boolean delete(int id, String code) {
         Offer offer = findById(id);
-        if (offer.getCode().equals(code)){
+        if (offer.getCode().equals(code)) {
             offerRepo.delete(offer);
             return true;
-        }return false;
+        }
+        return false;
     }
-    //TODO add update if proper code to controller
-
 
     @Override
-    public Offer update(int id, Offer offer, String code) {
+    public OfferCodeless update(int id, Offer offer, String code) {
         Offer dbOffer = findById(id);
-        if (!code.equals(dbOffer.getCode())){
+        if (!codeCheck(code, dbOffer)) {
             throw new RuntimeException("Wrong code");
         }
-        offer.setCode(code);
+        offer.setId(dbOffer.getId());
+        offer.setCode(dbOffer.getCode());
         offer.setPostedOn(dbOffer.getPostedOn());
         offerRepo.save(offer);
-        return offer;
+        return offerToCodeless(offer);
     }
 
     @Override
     public Offer add(Offer offer) {
+        //here i'd add some SMS service like twilio to provide special code to the user
         offer.setId(0);
         offer.setPostedOn(new Timestamp(System.currentTimeMillis()));
         offer.setCode(SpecialCodeGenerator.codeGenerator());
-        if(offer.getCode().length()!=codeLen){
-            throw new RuntimeException("Code length error");
-        }
         return offerRepo.save(offer);
     }
+
     @Scheduled(cron = "55 59 23 * * ?")
-    public void clearTable(){
+    public void clearTable() {
         //TODO add archiving/history feature
         offerRepo.deleteAll();
     }
 
+    private boolean codeCheck(String code, Offer offer) {
+        return code.toLowerCase().equals(offer.getCode());
+    }
 
-    private static class SpecialCodeGenerator{
-        static char[] chars = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p', 'a', 's',
-                'd', 'f', 'g', 'h', 'j', 'k', 'l', 'y', 'x', 'c', 'v', 'b', 'n', 'm', 'Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P', 'A',
-                'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Y', 'X', 'C', 'V', 'B', 'N', 'M' };
+    private OfferCodeless offerToCodeless(Offer offer) {
+        return new OfferCodeless(offer);
+    }
 
-        private static String codeGenerator(){
+    private static class SpecialCodeGenerator {
+        static char[] chars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'q', 'w', 'e', 'r', 't', 'z', 'u', 'i', 'o', 'p', 'a', 's',
+                'd', 'f', 'g', 'h', 'j', 'k', 'l', 'y', 'x', 'c', 'v', 'b', 'n', 'm'};
+
+        private static String codeGenerator() {
             StringBuilder stringBuilder = new StringBuilder();
-            for(int i = 0; i < codeLen; i++){
+            for (int i = 0; i < codeLen; i++) {
                 stringBuilder.append(chars[new Random().nextInt(chars.length)]);
             }
             return stringBuilder.toString();

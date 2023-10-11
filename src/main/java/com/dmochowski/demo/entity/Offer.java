@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="offers")
+@Table(name = "offers")
 @NoArgsConstructor
 @Setter
 @Getter
@@ -14,7 +14,7 @@ public class Offer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="ID")
+    @Column(name = "ID")
     private int id;
 
     @Column(name = "TITLE")
@@ -23,9 +23,12 @@ public class Offer {
     private String details;
     @Column(name = "CATEGORY")
     private String category;
+    @Column(name = "CONTACT")
+    private int contact;
     @Column(name = "POSTED_ON")
     private java.sql.Timestamp postedOn;
     @Column(name = "SPECIAL_CODE")
     private String code;
+
 
 }

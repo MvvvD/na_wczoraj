@@ -2,6 +2,7 @@ package com.dmochowski.demo.rest;
 
 import com.dmochowski.demo.entity.Code;
 import com.dmochowski.demo.entity.Offer;
+import com.dmochowski.demo.entity.OfferCodeless;
 import com.dmochowski.demo.service.OfferService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -15,23 +16,26 @@ public class OfferController {
     private final OfferService offerService;
 
     @GetMapping()
-    public List<Offer> getAll(){
-        return offerService.findAll();
+    public List<OfferCodeless> getAll(){
+        return offerService.findAllCodeless();
     }
 
     @GetMapping("/{id}")
-    public Offer getById(@PathVariable int id){
-        return offerService.findById(id);
+    public OfferCodeless getById(@PathVariable int id){
+        return offerService.findByIdCodeless(id);
     }
 
     @GetMapping("/{category}")
-    public List<Offer> getByCategory(@PathVariable String category){
+    public List<OfferCodeless> getByCategory(@PathVariable String category){
         return offerService.findByCategory(category);
+    }
+    @PutMapping("/{id}")
+    public OfferCodeless update(@PathVariable int id, @RequestBody Code code, Offer offer){
+        return offerService.update(id, offer, code.code());
     }
 
     @DeleteMapping("/{id}")
     public boolean remove(@PathVariable int id, @RequestBody Code code){
-        System.out.println(code);
         return offerService.delete(id, code.code());
     }
 
