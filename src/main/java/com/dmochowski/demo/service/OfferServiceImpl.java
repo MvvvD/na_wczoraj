@@ -51,10 +51,6 @@ public class OfferServiceImpl implements OfferService {
     public OfferCodeless findByIdCodeless(int id) {
         return offerToCodeless(findById(id));
     }
-    @Override
-    public void delete(Offer offer) {
-        offerRepo.delete(offer);
-    }
 
     @Override
     public boolean delete(int id, String code) {
@@ -82,6 +78,7 @@ public class OfferServiceImpl implements OfferService {
     @Override
     public Offer add(Offer offer) {
         //here i'd add some SMS service like twilio to provide special code to the user
+        //TODO add category verification
         offer.setId(0);
         offer.setPostedOn(new Timestamp(System.currentTimeMillis()));
         offer.setCode(SpecialCodeGenerator.codeGenerator());

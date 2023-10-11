@@ -11,7 +11,6 @@ public interface OfferService {
     List<OfferCodeless> findByCategory(String category);
     Offer findById(int id);
     OfferCodeless findByIdCodeless(int id);
-    void delete(Offer offer);
     OfferCodeless update(int id, Offer offer, String code);
     boolean delete(int id, String code);
     Offer add(Offer offer);
