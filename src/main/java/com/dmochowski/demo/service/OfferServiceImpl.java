@@ -8,16 +8,15 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class OfferServiceImpl implements OfferService {
     private final OfferRepo offerRepo;
     private static final int codeLen = 8;
+    private static final String[] categories = {"złota rączka", "korepetycje",
+            "sprzątanie", "opieka nad dzieckiem", "zakupy", "opieka nad zwierzęciem"};
 
     @Override
     public List<Offer> findAll() {
@@ -32,8 +31,13 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<OfferCodeless> findByCategory(String category) {
+        if (!Arrays.asList(categories).contains(category.toLowerCase())) {
+            throw new RuntimeException("wrong category " + category);
+
+        }
+        category = category.toLowerCase();
         List<OfferCodeless> codeless = new ArrayList<>();
-        offerRepo.findByCategory(category).forEach(offer -> codeless.add(offerToCodeless(offer)));
+        offerRepo.findByCategory(category.toLowerCase()).forEach(offer -> codeless.add(offerToCodeless(offer)));
         return codeless;
     }
 
@@ -71,17 +75,21 @@ public class OfferServiceImpl implements OfferService {
         offer.setId(dbOffer.getId());
         offer.setCode(dbOffer.getCode());
         offer.setPostedOn(dbOffer.getPostedOn());
+        offer.setCategory(offer.getCategory().toLowerCase());
         offerRepo.save(offer);
         return offerToCodeless(offer);
     }
 
     @Override
     public Offer add(Offer offer) {
-        //here i'd add some SMS service like twilio to provide special code to the user
-        //TODO add category verification
+        if (!Arrays.asList(categories).contains(offer.getCategory().toLowerCase())) {
+            throw new RuntimeException("wrong category from offer titled " + offer.getTitle() + " id : " + offer.getId());
+        }
         offer.setId(0);
         offer.setPostedOn(new Timestamp(System.currentTimeMillis()));
         offer.setCode(SpecialCodeGenerator.codeGenerator());
+        System.out.println(offer.getCode());
+        //here I'd add some SMS service like twilio to provide special code to the user
         return offerRepo.save(offer);
     }
 
