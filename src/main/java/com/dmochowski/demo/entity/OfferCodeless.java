@@ -6,20 +6,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class OfferCodeless {
+public class OfferCodeless extends Offer {
     public OfferCodeless(Offer offer) {
-       this.id = offer.getId();
-        this.title = offer.getTitle();
-        this.details = offer.getDetails();
-        this.category = offer.getCategory();
-        this.contact = offer.getContact();
-        this.postedOn = offer.getPostedOn();
+        this.setId(offer.getId());
+        this.setTitle(offer.getTitle());
+        this.setDetails(offer.getDetails());
+        this.setContact(offer.getContact());
+        this.setCategory(offer.getCategory());
+        this.setPostedOn(offer.getPostedOn());
+        this.setCode("secret code");
     }
-
-    private int id;
-    private String title;
-    private String details;
-    private String category;
-    private int contact;
-    private java.sql.Timestamp postedOn;
 }
