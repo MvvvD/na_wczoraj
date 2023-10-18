@@ -85,12 +85,20 @@ public class OfferServiceImpl implements OfferService {
         if (!Arrays.asList(categories).contains(offer.getCategory().toLowerCase())) {
             throw new RuntimeException("wrong category from offer titled " + offer.getTitle() + " id : " + offer.getId());
         }
+        if (existsOfferByContact(offer.getContact())) {
+            throw new RuntimeException("Phone number already in use");
+        }
         offer.setId(0);
         offer.setPostedOn(new Timestamp(System.currentTimeMillis()));
         offer.setCode(SpecialCodeGenerator.codeGenerator());
         System.out.println(offer.getCode());
         //here I'd add some SMS service like twilio to provide special code to the user
         return offerRepo.save(offer);
+    }
+
+    @Override
+    public boolean existsOfferByContact(int contact) {
+        return offerRepo.existsOfferByContact(contact);
     }
 
     @Scheduled(cron = "55 59 23 * * ?")

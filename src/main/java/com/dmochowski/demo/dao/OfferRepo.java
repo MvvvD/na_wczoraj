@@ -7,4 +7,7 @@ import java.util.List;
 
 public interface OfferRepo extends JpaRepository<Offer, Integer> {
     List<Offer> findByCategory(String category);
+
+    boolean existsOfferByContact(int contact);
+
 }

@@ -10,6 +10,8 @@ public interface OfferService {
     List<OfferCodeless> findAllCodeless();
     List<OfferCodeless> findByCategory(String category);
     Offer findById(int id);
+
+    boolean existsOfferByContact(int contact);
     OfferCodeless findByIdCodeless(int id);
     OfferCodeless update(int id, Offer offer, String code);
     boolean delete(int id, String code);
