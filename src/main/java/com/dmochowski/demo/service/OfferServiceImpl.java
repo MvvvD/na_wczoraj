@@ -104,7 +104,7 @@ public class OfferServiceImpl implements OfferService {
     @Scheduled(cron = "55 59 23 * * ?")
     public void clearTable() {
         //TODO add archiving/history feature
-        offerRepo.deleteAll();
+        offerRepo.truncateTable();
     }
 
     private boolean codeCheck(String code, Offer offer) {
