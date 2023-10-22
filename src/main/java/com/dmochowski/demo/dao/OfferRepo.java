@@ -11,6 +11,8 @@ import java.util.List;
 public interface OfferRepo extends JpaRepository<Offer, Integer> {
     List<Offer> findByCategory(String category);
 
+    List<Offer> findAllByOrderByPostedOnDesc();
+
     boolean existsOfferByContact(int contact);
 
     @Modifying

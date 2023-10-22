@@ -7,7 +7,9 @@ import java.util.List;
 
 public interface OfferService {
     List<Offer> findAll();
-    List<OfferCodeless> findAllCodeless();
+
+    List<OfferCodeless> findAllSortedCodeless();
+
     List<OfferCodeless> findByCategory(String category);
     Offer findById(int id);
 

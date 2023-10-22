@@ -17,7 +17,7 @@ public class OfferController {
 
     @GetMapping()
     public List<OfferCodeless> getAll(){
-        return offerService.findAllCodeless();
+        return offerService.findAllSortedCodeless();
     }
 
     @GetMapping("/{id}")

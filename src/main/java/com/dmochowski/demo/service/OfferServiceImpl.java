@@ -20,14 +20,16 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<Offer> findAll() {
-        return offerRepo.findAll();
+        return offerRepo.findAllByOrderByPostedOnDesc();
     }
+
     @Override
-    public List<OfferCodeless> findAllCodeless() {
+    public List<OfferCodeless> findAllSortedCodeless() {
         List<OfferCodeless> codeless = new ArrayList<>();
         findAll().forEach(offer -> codeless.add(offerToCodeless(offer)));
         return codeless;
     }
+
 
     @Override
     public List<OfferCodeless> findByCategory(String category) {
