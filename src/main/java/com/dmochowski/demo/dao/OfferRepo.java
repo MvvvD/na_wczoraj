@@ -10,10 +10,11 @@ import java.util.List;
 
 public interface OfferRepo extends JpaRepository<Offer, Integer> {
     List<Offer> findByCategory(String category);
+    
+    @Query(value = "SELECT * from offers where IS_VISIBLE = 1 order by POSTED_ON desc ", nativeQuery = true)
+    List<Offer> findAllVisible();
 
-    List<Offer> findAllByOrderByPostedOnDesc();
-
-    boolean existsOfferByContact(int contact);
+    boolean existsOfferByContact(String contact);
 
     @Modifying
     @Transactional

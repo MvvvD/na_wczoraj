@@ -24,11 +24,12 @@ public class Offer {
     @Column(name = "CATEGORY")
     private String category;
     @Column(name = "CONTACT")
-    private int contact;
+    private String contact;
     @Column(name = "POSTED_ON")
     private java.sql.Timestamp postedOn;
     @Column(name = "SPECIAL_CODE")
     private String code;
-
+    @Column(name = "IS_VISIBLE")
+    private int visibility;
 
 }

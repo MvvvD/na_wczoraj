@@ -20,7 +20,7 @@ public class OfferServiceImpl implements OfferService {
 
     @Override
     public List<Offer> findAll() {
-        return offerRepo.findAllByOrderByPostedOnDesc();
+        return offerRepo.findAllVisible();
     }
 
     @Override
@@ -99,8 +99,18 @@ public class OfferServiceImpl implements OfferService {
     }
 
     @Override
-    public boolean existsOfferByContact(int contact) {
+    public boolean existsOfferByContact(String contact) {
         return offerRepo.existsOfferByContact(contact);
+    }
+
+    @Override
+    public boolean activation(int id, String code) {
+        Offer offer = findById(id);
+        if (offer.getCode().equals(code)) {
+            offer.setVisibility(1);
+            offerRepo.save(offer);
+        }
+        return offer.getCode().equals(code);
     }
 
     @Scheduled(cron = "55 59 23 * * ?")
