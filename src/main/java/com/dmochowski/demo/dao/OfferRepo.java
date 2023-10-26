@@ -9,8 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface OfferRepo extends JpaRepository<Offer, Integer> {
+    @Query(value = "SELECT * from offers where IS_VISIBLE = 1 AND CATEGORY = :category order by POSTED_ON desc ", nativeQuery = true)
     List<Offer> findByCategory(String category);
-    
+
     @Query(value = "SELECT * from offers where IS_VISIBLE = 1 order by POSTED_ON desc ", nativeQuery = true)
     List<Offer> findAllVisible();
 

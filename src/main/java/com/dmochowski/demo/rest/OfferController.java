@@ -20,16 +20,18 @@ public class OfferController {
         return offerService.findAllSortedCodeless();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public OfferCodeless getById(@PathVariable int id){
         return offerService.findByIdCodeless(id);
     }
 
-    @GetMapping("/{category}")
-    public List<OfferCodeless> getByCategory(@PathVariable String category){
+    @GetMapping("/category")
+    @ResponseBody
+    public List<OfferCodeless> getByCategory(@RequestParam(value = "category") String category) {
         return offerService.findByCategory(category);
     }
-    @PutMapping("/{id}")
+
+    @PutMapping("/id/{id}")
     public OfferCodeless update(@PathVariable int id, @RequestBody Code code, Offer offer){
         return offerService.update(id, offer, code.code());
     }
@@ -39,7 +41,7 @@ public class OfferController {
         return offerService.activation(id, code.code());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/id/{id}")
     public boolean remove(@PathVariable int id, @RequestBody Code code){
         return offerService.delete(id, code.code());
     }
