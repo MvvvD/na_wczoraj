@@ -29,7 +29,7 @@ public class Offer {
     private java.sql.Timestamp postedOn;
     @Column(name = "SPECIAL_CODE")
     private String code;
-    @Column(name = "IS_VISIBLE")
-    private int visibility;
+    @Column(name = "IS_VISIBLE", columnDefinition = "TINYINT(1)")
+    private boolean visibility;
 
 }

@@ -107,7 +107,7 @@ public class OfferServiceImpl implements OfferService {
     public boolean activation(int id, String code) {
         Offer offer = findById(id);
         if (offer.getCode().equals(code)) {
-            offer.setVisibility(1);
+            offer.setVisibility(true);
             offerRepo.save(offer);
         }
         return offer.getCode().equals(code);

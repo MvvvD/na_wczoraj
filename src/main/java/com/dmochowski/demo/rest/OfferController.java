@@ -36,7 +36,7 @@ public class OfferController {
         return offerService.update(id, offer, code.code());
     }
 
-    @PutMapping("/{id}/activate")
+    @PutMapping("/id/{id}/activate")
     public boolean activate(@PathVariable int id, @RequestBody Code code) {
         return offerService.activation(id, code.code());
     }

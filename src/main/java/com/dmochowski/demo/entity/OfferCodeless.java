@@ -15,6 +15,6 @@ public class OfferCodeless extends Offer {
         this.setCategory(offer.getCategory());
         this.setPostedOn(offer.getPostedOn());
         this.setCode("secret code");
-        this.setVisibility(offer.getVisibility());
+        this.setVisibility(offer.isVisibility());
     }
 }
