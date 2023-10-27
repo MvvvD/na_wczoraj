@@ -30,6 +30,6 @@ public class Offer {
     @Column(name = "SPECIAL_CODE")
     private String code;
     @Column(name = "IS_VISIBLE", columnDefinition = "TINYINT(1)")
-    private boolean visibility;
+    private boolean isVisible;
 
 }
